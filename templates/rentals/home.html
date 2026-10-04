@@ -1,0 +1,59 @@
+{% extends 'base.html' %}{% block title %}Find your next place{% endblock %}
+{% block main %}
+<section class="hero"><div class="container"><div class="row align-items-center g-5">
+  <div class="col-lg-7">
+    <h1 class="mb-3">Find a place that fits your month.</h1>
+    <p class="lead mb-4">Apartments, houses, rooms and offices from owners who answer. Search, send a request, and hear back, all in one place.</p>
+    <form class="search-panel" method="get" action="{% url 'rentals:property_list' %}">
+      <label class="field"><i class="bi bi-geo-alt-fill"></i>{{ form.q }}</label>
+      <label class="field"><i class="bi bi-house-door-fill"></i>{{ form.property_type }}</label>
+      <button class="btn btn-sun px-4">Search</button>
+    </form>
+    <p class="muted mt-3 mb-0">{{ stats.homes }} home{{ stats.homes|pluralize }} available now from {{ stats.owners }} owner{{ stats.owners|pluralize }}.</p>
+  </div>
+  <div class="col-lg-5 d-none d-lg-block"><div class="hero-art">
+    <svg viewBox="0 0 480 400" class="w-100" role="img" aria-label="Illustration of apartment buildings">
+      <defs><pattern id="win" width="40" height="40" patternUnits="userSpaceOnUse"><rect x="10" y="10" width="20" height="20" rx="4" fill="#EAF2F3" opacity=".9"/></pattern></defs>
+      <rect x="20" y="360" width="440" height="8" rx="4" fill="#0B3D3A"/>
+      <rect x="50" y="150" width="150" height="210" rx="12" fill="#0B3D3A"/><rect x="50" y="150" width="150" height="190" fill="url(#win)"/>
+      <rect x="215" y="70" width="120" height="290" rx="12" fill="#0E7C7B"/><rect x="215" y="80" width="120" height="270" fill="url(#win)"/>
+      <rect x="350" y="210" width="100" height="150" rx="12" fill="#FFC53D"/><rect x="350" y="215" width="100" height="100" fill="url(#win)" opacity=".6"/>
+      <rect x="383" y="320" width="34" height="40" rx="6" fill="#0B3D3A"/>
+    </svg>
+    <div class="tag"><i class="bi bi-key-fill text-warning"></i> Available to rent</div>
+  </div></div>
+</div></div></section>
+
+{% if featured %}
+<section class="section pt-0"><div class="container">
+  <div class="d-flex justify-content-between align-items-end mb-3"><h2 class="h3 mb-0">Newly listed</h2>
+    <a href="{% url 'rentals:property_list' %}" class="fw-semibold text-decoration-none">See all properties <i class="bi bi-arrow-right"></i></a></div>
+  <div class="row g-3">{% for p in featured %}<div class="col-md-4">{% include '_property_card.html' %}</div>{% endfor %}</div>
+</div></section>
+{% endif %}
+
+<section class="section"><div class="container">
+  <h2 class="h3 mb-4">How renting works</h2>
+  <div class="row g-3 steps">
+    <div class="col-md-4"><div class="step surface"><div class="step-n">1</div><h3 class="h5">Search</h3><p class="muted mb-0">Filter by location, property type and monthly rent to see only what you can actually take.</p></div></div>
+    <div class="col-md-4"><div class="step surface"><div class="step-n">2</div><h3 class="h5">Send a request</h3><p class="muted mb-0">Introduce yourself in a short message. The owner is notified right away.</p></div></div>
+    <div class="col-md-4"><div class="step surface"><div class="step-n">3</div><h3 class="h5">Get an answer</h3><p class="muted mb-0">Track the status on your dashboard, and leave a review once you're accepted.</p></div></div>
+  </div>
+</div></section>
+
+<section class="section pt-0"><div class="container"><div class="row g-3">
+  <div class="col-md-6"><div class="role-panel owner">
+    <h2 class="h3">Own a property?</h2>
+    <ul><li><i class="bi bi-check-circle-fill"></i> List it with photos, rent and details</li>
+      <li><i class="bi bi-check-circle-fill"></i> Accept or reject requests from one dashboard</li>
+      <li><i class="bi bi-check-circle-fill"></i> See pending and accepted requests at a glance</li></ul>
+    <a class="btn btn-sun" href="{% url 'accounts:register' %}">Create an owner account</a></div></div>
+  <div class="col-md-6"><div class="role-panel tenant">
+    <h2 class="h3">Looking for a place?</h2>
+    <ul><li><i class="bi bi-check-circle-fill"></i> Browse every available listing for free</li>
+      <li><i class="bi bi-check-circle-fill"></i> Track all your requests in one list</li>
+      <li><i class="bi bi-check-circle-fill"></i> Read honest reviews from past tenants</li></ul>
+    <a class="btn btn-primary" href="{% url 'accounts:register' %}">Create a tenant account</a>
+    <a class="btn btn-link text-decoration-none" href="{% url 'accounts:login' %}">I already have an account</a></div></div>
+</div></div></section>
+{% endblock %}

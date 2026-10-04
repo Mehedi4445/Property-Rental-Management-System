@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% block title %}Create account{% endblock %}
+{% block main %}
+<div class="auth">
+  {% include 'accounts/_side.html' with headline="List it. Find it. Rent it." sub="One account to manage your properties or to find your next home." %}
+  <div class="auth-main"><div class="auth-box">
+    <h1 class="h2 mb-1">Create your account</h1>
+    <p class="muted mb-4">Already registered? <a href="{% url 'accounts:login' %}" class="fw-semibold">Log in</a></p>
+    <form method="post">{% csrf_token %}
+      {% for e in form.non_field_errors %}<div class="alert alert-danger py-2">{{ e }}</div>{% endfor %}
+      <label class="form-label">I want to</label>
+      <div class="role-grid mb-3">
+        {% for radio in form.role %}
+        <div>{{ radio.tag }}
+          <label class="role-card" for="{{ radio.id_for_label }}">
+            {% if radio.data.value == 'owner' %}<i class="bi bi-building"></i><b>List properties</b><span>I'm a property owner</span>
+            {% else %}<i class="bi bi-search-heart"></i><b>Find a place</b><span>I'm looking to rent</span>{% endif %}
+          </label></div>{% endfor %}
+      </div>
+      {% for e in form.role.errors %}<div class="text-danger small mb-2">{{ e }}</div>{% endfor %}
+      {% include '_field.html' with field=form.username %}
+      {% include '_field.html' with field=form.email %}
+      {% include '_field.html' with field=form.phone %}
+      {% include '_field.html' with field=form.password1 %}
+      {% include '_field.html' with field=form.password2 %}
+      <button class="btn btn-primary w-100 py-2">Create account</button>
+    </form>
+  </div></div>
+</div>
+{% endblock %}

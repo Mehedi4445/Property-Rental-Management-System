@@ -1,0 +1,17 @@
+<a href="{{ p.get_absolute_url }}" class="pcard surface d-block text-decoration-none text-reset h-100">
+  <div class="pcard-img">
+    {% if p.image %}<img src="{{ p.image.url }}" alt="{{ p.title }}" loading="lazy">{% else %}<div class="ph"><i class="bi bi-buildings"></i></div>{% endif %}
+    <span class="chip">{{ p.get_property_type_display }}</span>
+  </div>
+  <div class="p-3">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <h3 class="h6 mb-1">{{ p.title }}</h3>
+      {% if p.average_rating %}<span class="rate"><i class="bi bi-star-fill"></i> {{ p.average_rating|floatformat:1 }}</span>{% endif %}
+    </div>
+    <div class="muted small mb-3"><i class="bi bi-geo-alt"></i> {{ p.location }}</div>
+    <div class="d-flex justify-content-between align-items-end">
+      <div class="price">{{ currency }}{{ p.monthly_rent|floatformat:"-2" }}<small> /month</small></div>
+      <div class="muted small"><i class="bi bi-door-open"></i> {{ p.bedrooms }} &nbsp;<i class="bi bi-droplet"></i> {{ p.bathrooms }}</div>
+    </div>
+  </div>
+</a>

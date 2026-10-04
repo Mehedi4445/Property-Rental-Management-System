@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block title %}Log in{% endblock %}
+{% block main %}
+<div class="auth">
+  {% include 'accounts/_side.html' with headline="Welcome back." sub="Pick up where you left off: your listings, requests and replies are waiting." %}
+  <div class="auth-main"><div class="auth-box">
+    <h1 class="h2 mb-1">Log in</h1>
+    <p class="muted mb-4">New here? <a href="{% url 'accounts:register' %}" class="fw-semibold">Create an account</a></p>
+    <form method="post">{% csrf_token %}{% include '_form.html' %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button class="btn btn-primary w-100 py-2">Log in</button></form>
+  </div></div>
+</div>
+{% endblock %}

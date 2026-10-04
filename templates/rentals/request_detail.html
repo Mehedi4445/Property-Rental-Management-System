@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block title %}Request details{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-7"><div class="surface p-4">
+  <a href="{% url 'rentals:tenant_dashboard' %}" class="text-decoration-none muted"><i class="bi bi-arrow-left"></i> My requests</a>
+  <div class="d-flex justify-content-between align-items-start mt-3 mb-3 gap-2">
+    <h1 class="h3 mb-0">{{ rental.property.title }}</h1><span class="status status-{{ rental.status }}">{{ rental.get_status_display }}</span></div>
+  <p class="muted"><i class="bi bi-geo-alt"></i> {{ rental.property.location }} · sent {{ rental.request_date|date:"j M Y, H:i" }}</p>
+  <div class="p-3 mb-3" style="background:var(--mist);border-radius:14px;white-space:pre-line">{{ rental.message }}</div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-dark" href="{{ rental.property.get_absolute_url }}">View property</a>
+    {% if rental.status == 'pending' %}<form method="post" action="{% url 'rentals:cancel_request' rental.pk %}" data-confirm="Cancel this request?">{% csrf_token %}<button class="btn btn-outline-dark text-danger">Cancel request</button></form>{% endif %}
+  </div></div></div></div>
+{% endblock %}

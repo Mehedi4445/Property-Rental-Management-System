@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% block title %}Browse properties{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-3">
+  <div><h1 class="h2 mb-1">Browse properties</h1><span class="muted">{{ page.paginator.count }} result{{ page.paginator.count|pluralize }}</span></div>
+</div>
+<form method="get" class="surface filter-bar mb-4" data-autosubmit>
+  <div class="row g-2 align-items-end">
+    <div class="col-md-4"><label class="form-label">Location</label>{{ form.q }}</div>
+    <div class="col-md-3"><label class="form-label">Type</label>{{ form.property_type }}</div>
+    <div class="col-6 col-md-2"><label class="form-label">Min rent</label>{{ form.min_rent }}</div>
+    <div class="col-6 col-md-2"><label class="form-label">Max rent</label>{{ form.max_rent }}</div>
+    <div class="col-md-1 d-grid"><button class="btn btn-primary" aria-label="Search"><i class="bi bi-search"></i></button></div>
+  </div>
+  {% for e in form.non_field_errors %}<div class="text-danger small mt-2">{{ e }}</div>{% endfor %}
+  {% for f in form %}{% for e in f.errors %}<div class="text-danger small mt-2">{{ f.label }}: {{ e }}</div>{% endfor %}{% endfor %}
+</form>
+<div class="row g-3">
+  {% for p in page %}<div class="col-md-6 col-lg-4">{% include '_property_card.html' %}</div>
+  {% empty %}<div class="col-12"><div class="surface empty"><i class="bi bi-search"></i><h2 class="h5 mt-2">No properties match</h2>
+    <p class="mb-3">Try a wider rent range or clear the location.</p><a class="btn btn-soft" href="{% url 'rentals:property_list' %}">Clear filters</a></div></div>{% endfor %}
+</div>
+{% if page.has_other_pages %}
+<nav class="mt-4 d-flex justify-content-center"><ul class="pagination">
+  {% if page.has_previous %}<li class="page-item"><a class="page-link" href="?{{ query }}&page={{ page.previous_page_number }}">Previous</a></li>{% endif %}
+  <li class="page-item disabled"><span class="page-link">Page {{ page.number }} of {{ page.paginator.num_pages }}</span></li>
+  {% if page.has_next %}<li class="page-item"><a class="page-link" href="?{{ query }}&page={{ page.next_page_number }}">Next</a></li>{% endif %}
+</ul></nav>{% endif %}
+{% endblock %}

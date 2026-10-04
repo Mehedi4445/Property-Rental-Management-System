@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% block title %}My requests{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+  <div><h1 class="h2 mb-1">Hi, {{ user.first_name|default:user.username }}</h1><span class="muted">Here's where your rental requests stand.</span></div>
+  <a class="btn btn-primary" href="{% url 'rentals:property_list' %}"><i class="bi bi-search"></i> Browse properties</a></div>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3"><div class="surface stat"><div class="ico"><i class="bi bi-inbox"></i></div><div><div class="num" data-count="{{ stats.total }}">0</div><span class="muted">Total requests</span></div></div></div>
+  <div class="col-6 col-lg-3"><div class="surface stat"><div class="ico" style="background:#FFF2CC;color:#8a5a00"><i class="bi bi-hourglass-split"></i></div><div><div class="num" data-count="{{ stats.pending }}">0</div><span class="muted">Pending</span></div></div></div>
+  <div class="col-6 col-lg-3"><div class="surface stat"><div class="ico" style="background:#D6F1E3;color:#116239"><i class="bi bi-check2-circle"></i></div><div><div class="num" data-count="{{ stats.accepted }}">0</div><span class="muted">Accepted</span></div></div></div>
+  <div class="col-6 col-lg-3"><div class="surface stat"><div class="ico" style="background:#FBDADA;color:#9b1c1c"><i class="bi bi-x-circle"></i></div><div><div class="num" data-count="{{ stats.rejected }}">0</div><span class="muted">Rejected</span></div></div></div>
+</div>
+<div class="surface">
+  {% for r in requests %}
+  <div class="row-item">
+    <div class="thumb">{% if r.property.image %}<img src="{{ r.property.image.url }}" alt="">{% else %}<div class="ph" style="font-size:1.5rem"><i class="bi bi-buildings"></i></div>{% endif %}</div>
+    <div class="flex-grow-1" style="min-width:200px"><a class="fw-bold text-decoration-none" href="{{ r.property.get_absolute_url }}">{{ r.property.title }}</a>
+      <div class="muted small">{{ r.property.location }} · sent {{ r.request_date|date:"j M Y" }}</div></div>
+    <span class="status status-{{ r.status }}">{{ r.get_status_display }}</span>
+    <div class="d-flex gap-2">
+      <a class="btn btn-sm btn-outline-dark" href="{% url 'rentals:request_detail' r.pk %}">Details</a>
+      {% if r.status == 'pending' %}<form method="post" action="{% url 'rentals:cancel_request' r.pk %}" data-confirm="Cancel this request?">{% csrf_token %}<button class="btn btn-sm btn-outline-dark text-danger">Cancel</button></form>{% endif %}
+      {% if r.status == 'accepted' and r.property_id not in reviewed %}<a class="btn btn-sm btn-sun" href="{% url 'rentals:add_review' r.property_id %}"><i class="bi bi-star"></i> Review</a>{% endif %}
+    </div>
+  </div>
+  {% empty %}<div class="empty"><i class="bi bi-send"></i><h2 class="h5 mt-2">No requests yet</h2><p>Find a property you like and send your first request.</p><a class="btn btn-primary" href="{% url 'rentals:property_list' %}">Browse properties</a></div>{% endfor %}
+</div>
+{% endblock %}
